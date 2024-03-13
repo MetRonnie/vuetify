@@ -145,7 +145,7 @@ A **contained** overlay is positioned absolutely and contained inside its parent
 
 #### Advanced
 
-Using the [v-hover](/components/hover), we are able to add a nice scrim over the information card with additional actions the user can take.
+Using the [v-hover](/components/hover) directive, we are able to add a nice scrim over the information card with additional actions the user can take.
 
 <ExamplesExample file="v-overlay/misc-advanced" />
 
@@ -154,3 +154,5 @@ Using the [v-hover](/components/hover), we are able to add a nice scrim over the
 Using the `v-overlay` as a background, add a progress component to easily create a custom loader.
 
 <ExamplesExample file="v-overlay/misc-loader" />
+
+#### Custom click outside behaviour

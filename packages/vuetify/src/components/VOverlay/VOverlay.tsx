@@ -48,6 +48,7 @@ import {
 // Types
 import type { PropType, Ref } from 'vue'
 import type { BackgroundColorData } from '@/composables/color'
+import type { ClickOutsideFunc, ClickOutsideObj } from '@/directives/click-outside'
 
 interface ScrimProps {
   [key: string]: unknown
@@ -89,6 +90,7 @@ export const makeVOverlayProps = propsFactory({
   contentProps: null,
   disabled: Boolean,
   opacity: [Number, String],
+  onClickOutside: [Object, Function] as PropType<Partial<ClickOutsideObj> | ClickOutsideFunc>,
   noClickAnimation: Boolean,
   modelValue: Boolean,
   persistent: Boolean,
@@ -179,19 +181,25 @@ export const VOverlay = genericComponent<OverlaySlots>()({
       updateLocation,
     })
 
-    function onClickOutside (e: MouseEvent) {
-      emit('click:outside', e)
+    const onClickOutside: ClickOutsideFunc | ClickOutsideObj = typeof props.onClickOutside === 'function'
+      ? props.onClickOutside
+      : {
+        handler: props.onClickOutside?.handler ?? function (e: MouseEvent) {
+          emit('click:outside', e)
 
-      if (!props.persistent) isActive.value = false
-      else animateClick()
-    }
-
-    function closeConditional (e: Event) {
-      return isActive.value && globalTop.value && (
-        // If using scrim, only close if clicking on it rather than anything opened on top
-        !props.scrim || e.target === scrimEl.value
+          if (!props.persistent) isActive.value = false
+          else animateClick()
+        },
+        closeConditional: props.onClickOutside?.closeConditional ?? function (e: Event) {
+          return isActive.value && globalTop.value && (
+          // If using scrim, only close if clicking on it rather than anything opened on top
+          !props.scrim || e.target === scrimEl.value
       )
-    }
+        },
+        include: props.onClickOutside?.include ?? function () {
+          return [activatorEl.value!]
+        },
+      }
 
     IN_BROWSER && watch(isActive, val => {
       if (val) {
@@ -320,7 +328,7 @@ export const VOverlay = genericComponent<OverlaySlots>()({
                 <div
                   ref={ contentEl }
                   v-show={ isActive.value }
-                  v-click-outside={{ handler: onClickOutside, closeConditional, include: () => [activatorEl.value] }}
+                  v-click-outside={ onClickOutside }
                   class={[
                     'v-overlay__content',
                     props.contentClass,

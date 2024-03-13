@@ -4,14 +4,16 @@ import { attachedRoot } from '@/util'
 // Types
 import type { DirectiveBinding } from 'vue'
 
-interface ClickOutsideBindingArgs {
-  handler: (e: MouseEvent) => void
+export type ClickOutsideFunc = (e: MouseEvent) => void
+
+export interface ClickOutsideObj {
+  handler: ClickOutsideFunc
   closeConditional?: (e: Event) => boolean
   include?: () => HTMLElement[]
 }
 
 interface ClickOutsideDirectiveBinding extends DirectiveBinding {
-  value: ((e: MouseEvent) => void) | ClickOutsideBindingArgs
+  value: ClickOutsideFunc | ClickOutsideObj
 }
 
 function defaultConditional () {
