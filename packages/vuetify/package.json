@@ -99,7 +99,7 @@
   },
   "scripts": {
     "watch": "yarn build:lib --watch",
-    "dev": "cross-env NODE_ENV=development vite",
+    "dev": "cross-env NODE_ENV=development vite --host",
     "dev:ssr": "cross-env NODE_ENV=development VITE_SSR=true vite-ssr",
     "dev:prod": "concurrently \"cross-env NODE_ENV=production vite build -w\" \"vite preview\"",
     "dev:typecheck": "vue-tsc --noEmit --skipLibCheck --project ./tsconfig.dev.json",
@@ -182,13 +182,13 @@
     "typescript": {
       "optional": true
     },
+    "vite-plugin-vuetify": {
+      "optional": true
+    },
     "vue-i18n": {
       "optional": true
     },
     "webpack-plugin-vuetify": {
-      "optional": true
-    },
-    "vite-plugin-vuetify": {
       "optional": true
     }
   },
